@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewpoint" content="width=device-width, initial-scale=1.0"/>
+        <meta charset="utf-8"/>
+        <title>task3</title>
+    </head>
+    <body>
+        <script>
+    let mid=[];
+    let counts={};
+    let uniq=[];
+    function func(...data) {
+        data.forEach(function(name){
+        if (name.length==2||name.length==3){
+            mid.push(name[1]);
+        }
+        else if (name.length==5||name.length==4){
+            mid.push(name[2]);
+        }
+        });
+        mid.forEach(function(element){
+        counts[element]=(counts[element]||0)+1;
+        });
+
+        for (let x in counts){
+        if (counts[x]==1){
+            uniq.push(x);
+        }
+        }
+        if (uniq.length===0){
+            console.log("沒有")
+        }else{
+            let uniqresult=data.filter(function(n){
+                return n.includes(uniq);
+            });
+            console.log(uniqresult)
+        }
+        mid=[];
+        counts={};
+        uniq=[];
+}
+
+func("彭大牆", "陳王明雅", "吳明"); // print 彭大牆
+func("郭靜雅", "王立強", "郭林靜宜", "郭立恆", "林花花"); // print 林花花
+func("郭宣雅", "林靜宜", "郭宣恆", "林靜花"); // print 沒有
+func("郭宣雅", "夏曼藍波安", "郭宣恆"); // print 夏曼藍波安
+        </script>
+    </body>
+</html>

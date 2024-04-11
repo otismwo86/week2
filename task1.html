@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewpoint" content="width=device-width, initial-scale=1.0"/>
+        <meta charset="utf-8"/>
+        <title>task1</title>
+    </head>
+    <body>
+        <script>
+    let all_station=["Songshan","Nanjing Sanmin","Taipei Arena","Nanjing Fuxing","Songjiang Nanjing","Zhongshan",
+         "Beimen","Ximen","Xiaonanmen","Chiang Kai-Shek Memorial Hall","Guting","Taipower Building","Gongguan","Wanlong","Jingmei",
+         "Dapinglin","Qizhang","Xiaobitan","Xindian City Hall","Xindian"];
+
+    let station=["Songshan","Nanjing Sanmin","Taipei Arena","Nanjing Fuxing","Songjiang Nanjing","Zhongshan",
+         "Beimen","Ximen","Xiaonanmen","Chiang Kai-Shek Memorial Hall","Guting","Taipower Building","Gongguan","Wanlong","Jingmei",
+         "Dapinglin","Qizhang","Xindian City Hall","Xindian"];
+
+let friendLoc=[];
+let locDict={};
+let lcc=[];
+let loc={};
+let x={};
+function closestvalue(list,k){
+    let closestElement=null;
+    let x=Infinity;
+    for (let n of list){
+        let c=Math.abs(n-k);
+        if (c<x){
+            x=c;
+            closestElement=n
+        }
+    }
+    return closestElement;
+}
+
+function find_closest_value(list,k){
+    let minuse=[];
+    for (let n of list){
+        let c=Math.abs(n-k)
+        minuse.push(c)
+    }
+    return Math.min(...minuse)
+}
+
+function findAndPrint(messages, currentStation) {
+    for (let [name, location] of Object.entries(messages)) {
+    for (let n of all_station) {
+        if (location.includes(n)){
+            locDict[n]=name;
+        }
+    }
+    }
+    // locDict working
+    if ("Xiaobitan" in locDict){             //測試成功//可用locDict呼叫小碧潭
+        for (let [data,location] of Object.entries(messages)){
+            for (let n of station){
+                if (location.includes(n))
+                {
+                    let order=station.indexOf(n); //order is correct
+                    friendLoc.push(order);
+                    friendLoc.sort();                         
+                    x=station.indexOf(currentStation);
+                    loc=station[closestvalue(friendLoc, x)]; 
+                    lcc=find_closest_value(friendLoc, x);//lcc is wrong!!!   
+                }
+            }
+        }
+            if (parseInt(x)>=16){
+                if (parseInt(lcc)>parseInt(x)-15) {
+                            console.log(locDict["Xiaobitan"]);
+                }else{
+                            console.log(locDict[loc]);
+                        }
+                    }
+                else if (parseInt(lcc)>17-parseInt(x)){
+                            console.log(locDict["Xiaobitan"]);
+                }else{
+                            console.log(locDict[loc]);
+                        
+                    }
+                
+            
+        
+    }else{
+        for (let [data,location] of Object.entries(messages)){
+            for (let n of station) {
+                if (location.includes(n)) {
+                    let order=station.indexOf(n);
+                    friendLoc.push(order);
+                    friendLoc.sort();
+                    let x=station.indexOf(currentStation);
+                    let loc=station[closestvalue(friendLoc,x)];
+                    let lcc=find_closest_value(friendLoc,x);
+                    console.log(locDict[loc]);
+                    console.log(lcc);
+                    console.log(station.indexOf(loc));
+                }
+            }
+        }
+    }
+}
+
+const messages={
+"Bob":"I'm at Ximen MRT station.",
+"Mary":"I have a drink near Jingmei MRT station.",
+"Copper":"I just saw a concert at Taipei Arena.",
+"Leslie":"I'm at home near Xiaobitan station.",
+"Vivian":"I'm at Xindian station waiting for you."
+};
+findAndPrint(messages, "Wanlong"); // print Mary
+findAndPrint(messages, "Songshan"); // print Copper
+findAndPrint(messages, "Qizhang"); // print Leslie
+findAndPrint(messages, "Ximen"); // print Bob
+findAndPrint(messages, "Xindian City Hall"); // print Vivian
+        </script>
+    </body>
+</html>

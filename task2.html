@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewpoint" content="width=device-width, initial-scale=1.0"/>
+        <meta charset="utf-8"/>
+        <title>task2</title>
+    </head>
+    <body>
+        <script>
+let time = [];
+let realhour = [];
+let availableconsultants = [];
+let selected = [];
+
+function createlists(consultants) {
+    for (let consultant of consultants){
+        let name=consultant["name"];
+        if (!window[name]){
+            window[name]=[];
+        }
+    }
+}
+
+function checktimeconflict(hours, name){
+    for (let time of hours){
+        if (window[name].includes(time)){
+            return false;
+        }
+    }
+    return true;
+}
+
+function book(consultants, hour, duration, criteria){
+    createlists(consultants);
+    let inth=parseInt(hour);
+    let intd=parseInt(duration);
+    realhour.push(inth);
+    while (intd>1){
+        inth=inth+1;
+        realhour.push(inth);
+        intd=intd-1;
+    }
+
+    for (let consultant of consultants){
+        if (checktimeconflict(realhour,consultant["name"])){
+            availableconsultants.push(consultant);
+        }
+    }
+
+    if (availableconsultants.length==0){
+        console.log("No Service");
+        realhour=[];
+        return;
+    }
+
+    if (criteria=="price"){
+        let minprice=Math.min(...availableconsultants.map(x => x["price"]));
+        for(let consultant of availableconsultants){
+            if (consultant["price"]==minprice){
+                selected.push(consultant);
+            }
+        }
+    }
+
+    if (criteria=="rate"){
+        let maxrate=Math.max(...availableconsultants.map(x => x["rate"]));
+        for (let consultant of availableconsultants){
+            if (consultant["rate"]==maxrate){
+                selected.push(consultant);
+            }
+        }
+    }
+
+    console.log(selected[0]["name"]);
+    for (let n of realhour){
+        window[selected[0]["name"]].push(n);
+    }
+    availableconsultants=[];
+    realhour=[];
+    selected=[];
+}
+
+const consultants=[
+{"name":"John", "rate":4.5, "price":1000},
+{"name":"Bob", "rate":3, "price":1200},
+{"name":"Jenny", "rate":3.8, "price":800}
+];
+book(consultants, 15, 1, "price"); // Jenny
+book(consultants, 11, 2, "price"); // Jenny
+book(consultants, 10, 2, "price"); // John
+book(consultants, 20, 2, "rate"); // John
+book(consultants, 11, 1, "rate"); // Bob
+book(consultants, 11, 2, "rate"); // No Service
+book(consultants, 14, 3, "price"); // John
+        </script>
+    </body>
+</html>
